@@ -1,8 +1,8 @@
 #include "Game.hpp"
 
 
-// TODO: 砲台の位置を画面左に、ターゲットの位置を画面右に移動させる。(A)
-// TODO: 雲の位置を左から右に動かす。見えなくなったら左端に戻す。(B)
+// TODO: 砲台の位置を画面左に、ターゲットの位置を画面右に移動させる。(A)hw16a185松本聖司
+// TODO: 雲の位置を左から右に動かす。見えなくなったら左端に戻す。(B)hw16a185松本聖司
 // TODO: 砲台を青い壁に沿って上下に動かす。(C)
 // TODO: 弾のスピードを速くし、弾が画面右端を通り越したら再度発射可能にする。(D)
 // TODO: スコアのサイズを大きくする。(E)
@@ -22,8 +22,8 @@ int     score;          //!< スコア
 void Start()
 {
     cloudPos = Vector2(-320, 100);
-    cannonPos = Vector2(-80, -150);
-    targetRect = Rect(80, -140, 40, 40);
+    cannonPos = Vector2(-310, -150);
+    targetRect = Rect(280, -140, 40, 40);
     bulletPos.x = -999;
     score = 0;
 }
@@ -53,6 +53,10 @@ void Update()
     FillRect(Rect(-320, -240, 640, 100), Color::green);
 
     // 雲の描画
+    cloudPos.x += 15;
+    if (cloudPos.x >= 320) {
+        cloudPos.x = -500;
+    }
     DrawImage("cloud1.png", cloudPos);
 
     // 弾の描画
