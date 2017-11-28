@@ -3,8 +3,8 @@
 
 // TODO: 砲台の位置を画面左に、ターゲットの位置を画面右に移動させる。(A)hw16a185松本聖司
 // TODO: 雲の位置を左から右に動かす。見えなくなったら左端に戻す。(B)hw16a185松本聖司
-// TODO: 砲台を青い壁に沿って上下に動かす。(C)
-// TODO: 弾のスピードを速くし、弾が画面右端を通り越したら再度発射可能にする。(D)
+// TODO: 砲台を青い壁に沿って上下に動かす。(C) 実装：HW15A215 山領萌美
+// TODO: 弾のスピードを速くし、弾が画面右端を通り越したら再度発射可能にする。(D) 実装：HW15A215 山領萌美
 // TODO: スコアのサイズを大きくする。(E) Hw16A100 須賀 康則
 // TODO: スコアを100点ずつ加算するようにし、5桁の表示に変える。(F) HW16A100 須賀 康則
 // TODO: PlayBGM()関数を使って、BGMを再生する。(G) HW16A100 須賀 康則
@@ -16,6 +16,7 @@ Vector2 cannonPos;      //!< 砲台の位置
 Vector2 bulletPos;      //!< 弾の位置
 Rect    targetRect;     //!< ターゲットの矩形
 int     score;          //!< スコア
+int     cannon_y;       //!< キャノンの上下繰り返し用
 
 
 // ゲーム開始時に呼ばれる関数です。
@@ -29,22 +30,21 @@ void Start()
     
     // BGMを再生する。(G) HW16A100 須賀 康則
     PlayBGM("bgm_maoudamashii_8bit07.mp3");
-    
+    cannon_y = 1;
 }
 
 // 1/60秒ごとに呼ばれる関数です。モデルの更新と画面の描画を行います。
 void Update()
 {
-    
-    
+    // 弾のスピード変更および画面端で弾を戻す 実装：HW15A215 山領萌美
     // 弾の発射
-    if (bulletPos.x <= -999 && Input::GetKeyDown(KeyMask::Space)) {
+    if (bulletPos.x <= -999  && Input::GetKeyDown(KeyMask::Space)) {
         bulletPos = cannonPos + Vector2(50, 10);
     }
 
     // 弾の移動
     if (bulletPos.x > -999) {
-        bulletPos.x += 10 * Time::deltaTime;
+        bulletPos.x += 100 * Time::deltaTime;
 
         // ターゲットと弾の当たり判定
         Rect bulletRect(bulletPos, Vector2(32, 20));
@@ -53,6 +53,9 @@ void Update()
             bulletPos.x = -999; // 弾を発射可能な状態に戻す
             PlaySound("se_maoudamashii_explosion03.mp3");//se
 
+        }
+        if(bulletPos.x > 320){
+            bulletPos.x = -999;
         }
     }
 
@@ -73,7 +76,13 @@ void Update()
     }
 
     // 砲台の描画
+    // 青い壁に沿って上下に動か ない 実装：HW15A215 山領萌美
     FillRect(Rect(cannonPos.x-10, -140, 20, 100), Color::blue);
+    if(cannonPos.y <= -65 && cannonPos.y >= -150){
+        cannonPos.y += 0.5 * cannon_y;
+    }else{
+        cannon_y *= -1;
+    }
     DrawImage("cannon.png", cannonPos);
 
     // ターゲットの描画
