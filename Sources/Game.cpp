@@ -27,6 +27,7 @@ void Start()
     targetRect = Rect(80, -140, 40, 40);
     bulletPos.x = -999;
     score = 0;
+
     cannon_y = 1;
 
     // BGMを再生する。(G) HW16A100 須賀 康則
@@ -37,7 +38,9 @@ void Start()
 // 1/60秒ごとに呼ばれる関数です。モデルの更新と画面の描画を行います。
 void Update()
 {
+
     // 弾のスピード変更および画面端で弾を戻す 実装：HW15A215 山領萌美
+
     // 弾の発射
     if (bulletPos.x <= -999  && Input::GetKeyDown(KeyMask::Space)) {
         bulletPos = cannonPos + Vector2(50, 10);
